@@ -1,16 +1,7 @@
  /* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useContext, useState } from 'react';
-import type { IUser } from '../interfaces';
+import type { IAuthContext, IUser } from '../interfaces';
 
-interface IAuthContext {
-  loggedUser: IUser | null;
-  loading: boolean;
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  logoutHandler: () => void;
-  loginHandler: (payload: { accessToken: string; userData: IUser }) => void;
-  updateLoginInfo: (payload: { accessToken: string; userData: IUser }) => void;
-  isAuthenticated: boolean;
-}
 
 const AuthContext = createContext<IAuthContext | null>(null);
 

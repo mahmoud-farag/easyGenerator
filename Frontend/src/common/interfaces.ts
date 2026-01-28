@@ -7,6 +7,9 @@ export interface IToastService {
     warning: (message: string, options?: ToastOptions) => void;
 };
 
+export type Options = {
+    [key: string]: unknown;
+};
 
 export interface IResponse<T = undefined> {
     success: boolean;
