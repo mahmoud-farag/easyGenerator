@@ -4,6 +4,7 @@ import { Lock, Loader2 } from 'lucide-react';
 import { useAuth } from '../../context/authContext';
 import authService from '../../services/auth-service';
 import toastService from '../../common/toastService';
+import { isValidEmail } from '../../utils';
 
 const LoginPage: React.FC = () => {
 
@@ -29,6 +30,11 @@ const LoginPage: React.FC = () => {
         
         if (!email || !password) {
             toastService.error('Please fill in all fields');
+            return;
+        }
+
+        if (!isValidEmail(email)) {
+            toastService.error('Please enter a valid email address');
             return;
         }
 

@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { UserPlus, Loader2 } from 'lucide-react';
 import authService from '../../services/auth-service';
 import toastService from '../../common/toastService';
+import { isValidEmail } from '../../utils';
 
 const SignupPage: React.FC = () => {
 
@@ -11,7 +12,13 @@ const SignupPage: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
-    
+    const [passwordRequirements, setPasswordRequirements] = useState({
+        minLength: false,
+        hasUppercase: false,
+        hasLowercase: false,
+        hasNumber: false,
+        hasSpecialChar: false
+    });
     const navigate = useNavigate();
 
     //* Custom hooks
@@ -19,6 +26,18 @@ const SignupPage: React.FC = () => {
     //* Refs
 
     //* Helper functions
+    const validatePassword = (password: string) => {
+        setPasswordRequirements({
+            minLength: password.length >= 8,
+            hasUppercase: /[A-Z]/.test(password),
+            hasLowercase: /[a-z]/.test(password),
+            hasNumber: /\d/.test(password),
+            hasSpecialChar: /[@$!%*?&]/.test(password),
+        });
+    };
+
+
+    
 
     //* Life cycle hooks
 
@@ -28,6 +47,11 @@ const SignupPage: React.FC = () => {
         
         if (!username || !email || !password) {
             toastService.error('Please fill in all fields');
+            return;
+        }
+
+        if (!isValidEmail(email)) {
+            toastService.error('Please enter a valid email address');
             return;
         }
 
@@ -78,7 +102,7 @@ const SignupPage: React.FC = () => {
 
                 <form className="mt-8 space-y-6" action="#" method="POST" onSubmit={handleSubmit}>
                     <input type="hidden" name="remember" value="true" />
-                    <div className="rounded-md shadow-sm -space-y-px">
+                    <div className="rounded-md  -space-y-px">
                         <div className="mb-4">
                             <label htmlFor="name" className="sr-only">Full Name</label>
                             <input
@@ -116,10 +140,35 @@ const SignupPage: React.FC = () => {
                                 autoComplete="new-password"
                                 required
                                 value={password}
-                                onChange={(e) => setPassword(e.target.value)}
+                                onChange={(e) => {setPassword(e.target.value); validatePassword(e.target.value)}}
                                 className="appearance-none rounded-lg relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 text-sm transition-all duration-200 ease-in-out"
                                 placeholder="Password"
                             />
+
+                            {password && (
+                                <div className="pl-1 mt-2 space-y-1 text-xs">
+                                    <div className={`flex items-center gap-1 ${passwordRequirements.minLength ? 'text-green-600' : 'text-red-500'}`}>
+                                        <span>{passwordRequirements.minLength ? '✓' : '✗'}</span>
+                                        <span>At least 8 characters</span>
+                                    </div>
+                                    <div className={`flex items-center gap-1 ${passwordRequirements.hasUppercase ? 'text-green-600' : 'text-red-500'}`}>
+                                        <span>{passwordRequirements.hasUppercase ? '✓' : '✗'}</span>
+                                        <span>One uppercase letter</span>
+                                    </div>
+                                    <div className={`flex items-center gap-1 ${passwordRequirements.hasLowercase ? 'text-green-600' : 'text-red-500'}`}>
+                                        <span>{passwordRequirements.hasLowercase ? '✓' : '✗'}</span>
+                                        <span>One lowercase letter</span>
+                                    </div>
+                                    <div className={`flex items-center gap-1 ${passwordRequirements.hasNumber ? 'text-green-600' : 'text-red-500'}`}>
+                                        <span>{passwordRequirements.hasNumber ? '✓' : '✗'}</span>
+                                        <span>One number</span>
+                                    </div>
+                                    <div className={`flex items-center gap-1 ${passwordRequirements.hasSpecialChar ? 'text-green-600' : 'text-red-500'}`}>
+                                        <span>{passwordRequirements.hasSpecialChar ? '✓' : '✗'}</span>
+                                        <span>One special character (@$!%*?&)</span>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </div>
 
