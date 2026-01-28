@@ -1,6 +1,8 @@
-import { ConflictException, Injectable, InternalServerErrorException } from '@nestjs/common';
-import { RegisterDto } from './dto/register.dto';
+import { ConflictException, Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
+import { RegisterDto, LoginDto } from './dto';
 import { UserService } from '../user/user.service';
+import bcrypt from 'bcryptjs';
+import { generateAccessToken } from '../common';
 
 @Injectable()
 export class AuthService {
@@ -32,5 +34,38 @@ export class AuthService {
       }
       throw new InternalServerErrorException('Error registering user');
     }
+  }
+
+  async login({ email, password }: LoginDto) {
+    const user = await this.userService.findByEmail(email);
+    if (!user) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordValid) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    // Generate access token
+    const accessToken = generateAccessToken({
+      id: user._id.toString(),
+      email: user.email,
+      username: user.username,
+    });
+
+    return {
+      success: true,
+      message: 'User logged in successfully',
+      data: {
+        user: {
+          id: user._id,
+          username: user.username,
+          email: user.email,
+        },
+        accessToken,
+      },
+    };
   }
 }

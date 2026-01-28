@@ -4,7 +4,6 @@ import { Model } from 'mongoose';
 import { User, UserDocument } from './user.schema';
 import { RegisterDto } from 'src/auth/dto/register.dto';
 
-
 @Injectable()
 export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
