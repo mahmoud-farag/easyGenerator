@@ -4,8 +4,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
 import { AppController } from './app.controller';
-import { AuthModule } from './auth/auth.module';
-import { UserModule } from './user/user.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { UserModule } from './modules/user/user.module';
 import { AuthenticationGuard } from './common/guards';
 
 @Module({
@@ -16,9 +16,20 @@ import { AuthenticationGuard } from './common/guards';
     }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
-        uri: configService.get<string>('MONGODB_URI'),
-      }),
+      useFactory: (configService: ConfigService) => {
+        const env = configService.get<string>('NODE_ENV') || 'development';
+        let uriKey = 'MONGODB_URI_DEV';
+
+        if (env === 'production') {
+          uriKey = 'MONGODB_URI_PROD';
+        } else if (env === 'test') {
+          uriKey = 'MONGODB_URI_TEST';
+        }
+
+        return {
+          uri: configService.get<string>(uriKey),
+        };
+      },
       inject: [ConfigService],
     }),
     JwtModule.registerAsync({

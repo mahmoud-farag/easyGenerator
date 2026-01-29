@@ -2,7 +2,7 @@ import { ConflictException, Injectable, InternalServerErrorException, Unauthoriz
 import { RegisterDto, LoginDto } from './dto';
 import { UserService } from '../user/user.service';
 import bcrypt from 'bcryptjs';
-import { generateAccessToken } from '../common';
+import { generateAccessToken } from '../../common';
 
 @Injectable()
 export class AuthService {
