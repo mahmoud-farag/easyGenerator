@@ -14,10 +14,9 @@ const SignupPage: React.FC = () => {
     const [loading, setLoading] = useState(false);
     const [passwordRequirements, setPasswordRequirements] = useState({
         minLength: false,
-        hasUppercase: false,
-        hasLowercase: false,
-        hasNumber: false,
-        hasSpecialChar: false
+        atLeastOneLetter: false,
+        atLeastOneNumber: false,
+        atLeastOneSpecialChar: false,
     });
     const navigate = useNavigate();
 
@@ -29,10 +28,9 @@ const SignupPage: React.FC = () => {
     const validatePassword = (password: string) => {
         setPasswordRequirements({
             minLength: password.length >= 8,
-            hasUppercase: /[A-Z]/.test(password),
-            hasLowercase: /[a-z]/.test(password),
-            hasNumber: /\d/.test(password),
-            hasSpecialChar: /[@$!%*?&]/.test(password),
+            atLeastOneLetter: /[a-zA-Z]/.test(password),
+            atLeastOneNumber: /\d/.test(password),
+            atLeastOneSpecialChar: /[@$!%*?&]/.test(password),
         });
     };
 
@@ -100,7 +98,7 @@ const SignupPage: React.FC = () => {
                     </p>
                 </div>
 
-                <form className="mt-8 space-y-6" action="#" method="POST" onSubmit={handleSubmit}>
+                <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
                     <input type="hidden" name="remember" value="true" />
                     <div className="rounded-md  -space-y-px">
                         <div className="mb-4">
@@ -151,21 +149,17 @@ const SignupPage: React.FC = () => {
                                         <span>{passwordRequirements.minLength ? '✓' : '✗'}</span>
                                         <span>At least 8 characters</span>
                                     </div>
-                                    <div className={`flex items-center gap-1 ${passwordRequirements.hasUppercase ? 'text-green-600' : 'text-red-500'}`}>
-                                        <span>{passwordRequirements.hasUppercase ? '✓' : '✗'}</span>
-                                        <span>One uppercase letter</span>
+                                    <div className={`flex items-center gap-1 ${passwordRequirements.atLeastOneLetter ? 'text-green-600' : 'text-red-500'}`}>
+                                        <span>{passwordRequirements.atLeastOneLetter ? '✓' : '✗'}</span>
+                                        <span>At least one letter.</span>
                                     </div>
-                                    <div className={`flex items-center gap-1 ${passwordRequirements.hasLowercase ? 'text-green-600' : 'text-red-500'}`}>
-                                        <span>{passwordRequirements.hasLowercase ? '✓' : '✗'}</span>
-                                        <span>One lowercase letter</span>
+                                    <div className={`flex items-center gap-1 ${passwordRequirements.atLeastOneNumber ? 'text-green-600' : 'text-red-500'}`}>
+                                        <span>{passwordRequirements.atLeastOneNumber ? '✓' : '✗'}</span>
+                                        <span>At least one number.</span>
                                     </div>
-                                    <div className={`flex items-center gap-1 ${passwordRequirements.hasNumber ? 'text-green-600' : 'text-red-500'}`}>
-                                        <span>{passwordRequirements.hasNumber ? '✓' : '✗'}</span>
-                                        <span>One number</span>
-                                    </div>
-                                    <div className={`flex items-center gap-1 ${passwordRequirements.hasSpecialChar ? 'text-green-600' : 'text-red-500'}`}>
-                                        <span>{passwordRequirements.hasSpecialChar ? '✓' : '✗'}</span>
-                                        <span>One special character (@$!%*?&)</span>
+                                    <div className={`flex items-center gap-1 ${passwordRequirements.atLeastOneSpecialChar ? 'text-green-600' : 'text-red-500'}`}>
+                                        <span>{passwordRequirements.atLeastOneSpecialChar ? '✓' : '✗'}</span>
+                                        <span>At least one special character (@$!%*?&)</span>
                                     </div>
                                 </div>
                             )}

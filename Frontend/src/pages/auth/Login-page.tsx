@@ -42,7 +42,7 @@ const LoginPage: React.FC = () => {
 
             setLoading(true);
             
-            const response = await authService.login({ email, password});
+            const response = await authService.login({email, password});
 
             if (response?.success && response?.data) {
 
@@ -58,11 +58,11 @@ const LoginPage: React.FC = () => {
 
         } catch (error: unknown) {
 
-            if (error instanceof Error) 
+            if (error instanceof Error) {
                 toastService.error(error.message);
-            else 
+            } else {
                 toastService.error('An error occurred during login');
-
+            }
             
         } finally {
             setLoading(false);
@@ -86,7 +86,7 @@ const LoginPage: React.FC = () => {
                     </p>
                 </div>
 
-                <form className="mt-8 space-y-6 " action="#" method="POST" onSubmit={handleSubmit}>
+                <form className="mt-8 space-y-6 " onSubmit={handleSubmit}>
                     <input type="hidden" name="remember" value="true" />
                     <div className="rounded-md shadow-sm -space-y-px">
                         <div className="mb-4">

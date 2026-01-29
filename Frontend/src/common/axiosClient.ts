@@ -65,6 +65,11 @@ class AxiosClient {
         const errorMessage =
           error.response?.data?.message || error.message || '';
         const statusCode = error.response?.status;
+        const requestUrl = error.config?.url || '';
+
+        const isAuthEndpoint = 
+          requestUrl.includes('/auth/login') || 
+          requestUrl.includes('/auth/register');
 
         // Check for token expiration - handle both message and 401 status
         const isTokenExpired =
@@ -73,7 +78,7 @@ class AxiosClient {
           errorMessage.toLowerCase().includes('invalid token') ||
           errorMessage.toLowerCase().includes('jwt expired');
 
-        if (isTokenExpired || statusCode === 401) {
+        if ((isTokenExpired || statusCode === 401) && !isAuthEndpoint) {
           this.forceLogout();
           // Return a rejected promise that won't trigger other error handlers
           return Promise.reject(
