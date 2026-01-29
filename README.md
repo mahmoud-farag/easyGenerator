@@ -37,10 +37,17 @@ easyGenerator/
    Create a `.env` file in the Backend directory:
 
    ```env
-   MONGODB_URI=your_mongodb_connection_string
+   # Database URIs
+   MONGODB_URI_DEV=your_dev_mongodb_connection_string
+   MONGODB_URI_TEST=your_test_mongodb_connection_string
+   MONGODB_URI_PROD=your_prod_mongodb_connection_string
+
+   # Authentication
    JWT_SECRET=your_jwt_secret_key
-   PORT=4000
    EXPIRES_IN=5h
+
+   # Server
+   PORT=4000
    ```
 
 3. **Setup Frontend**
@@ -66,6 +73,15 @@ easyGenerator/
    npm run dev
    ```
    Frontend will run on `http://localhost:5173`
+
+## Testing
+
+### Backend Testing
+
+From the `Backend` directory, you can run:
+
+- **Unit Tests**: `npm run test`
+- **E2E Tests**: `npm run test:e2e`
 
 ## Tech Stack
 
@@ -94,3 +110,4 @@ easyGenerator/
 - Form validation
 - Toast notifications
 - Responsive UI design
+- Comprehensive Unit and E2E testing
