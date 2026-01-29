@@ -14,6 +14,7 @@ async function bootstrap() {
     .setDescription('The Easy Generator API description')
     .setVersion('1.0')
     .addTag('Easy Generator')
+    .addBearerAuth()
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('swagger', app, documentFactory);
