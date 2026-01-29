@@ -50,7 +50,7 @@ export class AuthService {
 
     // Generate access token
     const accessToken = generateAccessToken({
-      id: user._id.toString(),
+      _id: user._id.toString(),
       email: user.email,
       username: user.username,
     });

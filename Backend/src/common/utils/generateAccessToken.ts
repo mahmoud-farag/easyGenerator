@@ -2,7 +2,7 @@ import { BadRequestException, InternalServerErrorException } from '@nestjs/commo
 import { sign } from 'jsonwebtoken';
 
 interface TokenPayload {
-  id: string;
+  _id: string;
   email: string;
   username?: string;
 }
@@ -20,8 +20,12 @@ export const generateAccessToken = (data: TokenPayload): string => {
 
   const expiresIn = process.env?.EXPIRES_IN || '7d';
 
+  const payload = {
+    user: data,
+  };
+
   // @ts-expect-error - TypeScript has issues with expiresIn type but it works correctly at runtime
-  const token = sign(data, jwtSecret, { expiresIn });
+  const token = sign(payload, jwtSecret, { expiresIn });
 
   return token;
 };
